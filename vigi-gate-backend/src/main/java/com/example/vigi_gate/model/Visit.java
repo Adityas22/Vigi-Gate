@@ -32,6 +32,9 @@ public class Visit {
     @Column(nullable = false)
     private RiskScore riskScore;
 
+    @Column(columnDefinition = "integer default 0")
+    private Integer riskScoreValue = 0;
+
     private String riskReason;
 
     @Enumerated(EnumType.STRING)

@@ -17,6 +17,7 @@ public class VisitResponse {
     private LocalDateTime checkInTime;
     private LocalDateTime checkOutTime;
     private RiskScore riskScore;
+    private int riskScoreValue;
     private String riskReason;
     private VisitStatus status;
 }

@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, UserPlus, FileText, ShieldAlert } from 'lucide-react';
+import { LayoutDashboard, UserPlus, FileText, ShieldAlert, FileBarChart } from 'lucide-react';
 
 const MainLayout = () => {
     const location = useLocation();
@@ -8,6 +8,7 @@ const MainLayout = () => {
         { name: 'Dashboard', path: '/', icon: LayoutDashboard },
         { name: 'Registration', path: '/register', icon: UserPlus },
         { name: 'History', path: '/history', icon: FileText },
+        { name: 'AI Report', path: '/report', icon: FileBarChart },
     ];
 
     return (

@@ -48,6 +48,7 @@ public class VisitorService {
         visit.setVisitor(visitor);
         visit.setPurpose(request.getPurpose());
         visit.setRiskScore(riskResult.score());
+        visit.setRiskScoreValue(riskResult.numericScore());
         visit.setRiskReason(riskResult.reason());
         visit.setStatus(VisitStatus.ACTIVE);
         
@@ -96,6 +97,7 @@ public class VisitorService {
         response.setCheckInTime(visit.getCheckInTime());
         response.setCheckOutTime(visit.getCheckOutTime());
         response.setRiskScore(visit.getRiskScore());
+        response.setRiskScoreValue(visit.getRiskScoreValue());
         response.setRiskReason(visit.getRiskReason());
         response.setStatus(visit.getStatus());
         return response;

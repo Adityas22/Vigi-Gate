@@ -11,7 +11,8 @@ export const visitorApi = {
     register: (data) => api.post('/visitors/register', data),
     getActive: () => api.get('/visitors/active'),
     checkout: (id) => api.put(`/visitors/${id}/checkout`),
-    getHistory: () => api.get('/visitors/history')
+    getHistory: () => api.get('/visitors/history'),
+    getDailySummary: () => api.get('/reports/daily-summary')
 };
 
 export default api;

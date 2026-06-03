@@ -15,26 +15,22 @@ public class RiskEngineService {
     private final VisitRepository visitRepository;
 
     public RiskResult calculateRisk(Visitor visitor) {
-        LocalDateTime now = LocalDateTime.now();
-        int hour = now.getHour();
+        LocalDateTime last24Hours = LocalDateTime.now().minusHours(24);
 
-        // Rule 1: Outside business hours (before 7 AM or after 7 PM)
-        if (hour < 7 || hour > 19) {
-            return new RiskResult(RiskScore.YELLOW, "Visit outside normal business hours");
+        // Query by NIK for more accurate counting across visits
+        int recentVisits = visitRepository.countByNikAndCheckInTimeAfter(visitor.getNik(), last24Hours);
+
+        // Kunjungan Ke-1 -> GREEN  (score: 10)
+        // Kunjungan Ke-2 -> YELLOW (score: 60)
+        // Kunjungan Ke-3+ -> RED  (score: 90)
+        if (recentVisits >= 2) {
+            return new RiskResult(RiskScore.RED, 90, "Potential spam visitor activity detected.");
+        } else if (recentVisits == 1) {
+            return new RiskResult(RiskScore.YELLOW, 60, "Repeated visit detected within 24 hours.");
         }
 
-        // Rule 2: High frequency (more than 3 visits in the last 24 hours)
-        LocalDateTime last24Hours = now.minusHours(24);
-        int recentVisits = visitRepository.countByVisitorIdAndCheckInTimeAfter(visitor.getId(), last24Hours);
-        
-        if (recentVisits > 5) {
-            return new RiskResult(RiskScore.RED, "Extremely high visit frequency (>5 visits in 24h)");
-        } else if (recentVisits > 3) {
-            return new RiskResult(RiskScore.YELLOW, "High visit frequency (>3 visits in 24h)");
-        }
-
-        return new RiskResult(RiskScore.GREEN, "Normal visit pattern");
+        return new RiskResult(RiskScore.GREEN, 10, "First visit detected. Normal visitor behavior.");
     }
 
-    public record RiskResult(RiskScore score, String reason) {}
+    public record RiskResult(RiskScore score, int numericScore, String reason) {}
 }
